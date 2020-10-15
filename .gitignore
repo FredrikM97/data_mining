@@ -127,3 +127,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+Project/datasets/Project_Dataset.csv
+Project/datasets/Measurments_in_SENDTIME.csv
+Project/datasets/.~lock.Discription.xlsx#
+Project/datasets/.~lock.Measurments_in_SENDTIME.csv#
+Project/Project_Dataset.csv
+Project/Discription.xlsx
+Project/datasets/VehiclesInformation.csv
+Project/Discription.xlsx
+Project/Project_Dataset.csv
