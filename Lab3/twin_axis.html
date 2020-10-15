@@ -1,0 +1,554 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  
+  <head>
+    
+      <meta charset="utf-8">
+      <title>Bokeh Plot</title>
+      
+      
+        
+          
+        <style>
+            table.panel-df {
+                    margin-left: auto;
+                    margin-right: auto;
+                    border: none;
+                    border-collapse: collapse;
+                    border-spacing: 0;
+                    color: black;
+                    font-size: 12px;
+                    table-layout: fixed;
+                    width: 100%;
+                }
+
+                .panel-df tr, .panel-df th, .panel-df td {
+                    text-align: right;
+                    vertical-align: middle;
+                    padding: 0.5em 0.5em !important;
+                    line-height: normal;
+                    white-space: normal;
+                    max-width: none;
+                    border: none;
+                }
+
+                .panel-df tbody {
+                    display: table-row-group;
+                    vertical-align: middle;
+                    border-color: inherit;
+                }
+
+                .panel-df tbody tr:nth-child(odd) {
+                    background: #f5f5f5;
+                }
+
+                .panel-df thead {
+                    border-bottom: 1px solid black;
+                    vertical-align: bottom;
+                }
+
+                .panel-df tr:hover {
+                    background: lightblue !important;
+                    cursor: pointer;
+                }
+
+        </style>
+        <style>
+            .json-formatter-row {
+                  font-family: monospace;
+                }
+                .json-formatter-row,
+                .json-formatter-row a,
+                .json-formatter-row a:hover {
+                  color: black;
+                  text-decoration: none;
+                }
+                .json-formatter-row .json-formatter-row {
+                  margin-left: 1rem;
+                }
+                .json-formatter-row .json-formatter-children.json-formatter-empty {
+                  opacity: 0.5;
+                  margin-left: 1rem;
+                }
+                .json-formatter-row .json-formatter-children.json-formatter-empty:after {
+                  display: none;
+                }
+                .json-formatter-row .json-formatter-children.json-formatter-empty.json-formatter-object:after {
+                  content: "No properties";
+                }
+                .json-formatter-row .json-formatter-children.json-formatter-empty.json-formatter-array:after {
+                  content: "[]";
+                }
+                .json-formatter-row .json-formatter-string,
+                .json-formatter-row .json-formatter-stringifiable {
+                  color: green;
+                  white-space: pre;
+                  word-wrap: break-word;
+                }
+                .json-formatter-row .json-formatter-number {
+                  color: blue;
+                }
+                .json-formatter-row .json-formatter-boolean {
+                  color: red;
+                }
+                .json-formatter-row .json-formatter-null {
+                  color: #855A00;
+                }
+                .json-formatter-row .json-formatter-undefined {
+                  color: #ca0b69;
+                }
+                .json-formatter-row .json-formatter-function {
+                  color: #FF20ED;
+                }
+                .json-formatter-row .json-formatter-date {
+                  background-color: rgba(0, 0, 0, 0.05);
+                }
+                .json-formatter-row .json-formatter-url {
+                  text-decoration: underline;
+                  color: blue;
+                  cursor: pointer;
+                }
+                .json-formatter-row .json-formatter-bracket {
+                  color: blue;
+                }
+                .json-formatter-row .json-formatter-key {
+                  color: #00008B;
+                  padding-right: 0.2rem;
+                }
+                .json-formatter-row .json-formatter-toggler-link {
+                  cursor: pointer;
+                }
+                .json-formatter-row .json-formatter-toggler {
+                  line-height: 1.2rem;
+                  font-size: 0.7rem;
+                  vertical-align: middle;
+                  opacity: 0.6;
+                  cursor: pointer;
+                  padding-right: 0.2rem;
+                }
+                .json-formatter-row .json-formatter-toggler:after {
+                  display: inline-block;
+                  transition: transform 100ms ease-in;
+                  content: "\25BA";
+                }
+                .json-formatter-row > a > .json-formatter-preview-text {
+                  opacity: 0;
+                  transition: opacity 0.15s ease-in;
+                  font-style: italic;
+                }
+                .json-formatter-row:hover > a > .json-formatter-preview-text {
+                  opacity: 0.6;
+                }
+                .json-formatter-row.json-formatter-open > .json-formatter-toggler-link .json-formatter-toggler:after {
+                  transform: rotate(90deg);
+                }
+                .json-formatter-row.json-formatter-open > .json-formatter-children:after {
+                  display: inline-block;
+                }
+                .json-formatter-row.json-formatter-open > a > .json-formatter-preview-text {
+                  display: none;
+                }
+                .json-formatter-row.json-formatter-open.json-formatter-empty:after {
+                  display: block;
+                }
+                .json-formatter-dark.json-formatter-row {
+                  font-family: monospace;
+                }
+                .json-formatter-dark.json-formatter-row,
+                .json-formatter-dark.json-formatter-row a,
+                .json-formatter-dark.json-formatter-row a:hover {
+                  color: white;
+                  text-decoration: none;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-row {
+                  margin-left: 1rem;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-children.json-formatter-empty {
+                  opacity: 0.5;
+                  margin-left: 1rem;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-children.json-formatter-empty:after {
+                  display: none;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-children.json-formatter-empty.json-formatter-object:after {
+                  content: "No properties";
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-children.json-formatter-empty.json-formatter-array:after {
+                  content: "[]";
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-string,
+                .json-formatter-dark.json-formatter-row .json-formatter-stringifiable {
+                  color: #31F031;
+                  white-space: pre;
+                  word-wrap: break-word;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-number {
+                  color: #66C2FF;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-boolean {
+                  color: #EC4242;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-null {
+                  color: #EEC97D;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-undefined {
+                  color: #ef8fbe;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-function {
+                  color: #FD48CB;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-date {
+                  background-color: rgba(255, 255, 255, 0.05);
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-url {
+                  text-decoration: underline;
+                  color: #027BFF;
+                  cursor: pointer;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-bracket {
+                  color: #9494FF;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-key {
+                  color: #23A0DB;
+                  padding-right: 0.2rem;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-toggler-link {
+                  cursor: pointer;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-toggler {
+                  line-height: 1.2rem;
+                  font-size: 0.7rem;
+                  vertical-align: middle;
+                  opacity: 0.6;
+                  cursor: pointer;
+                  padding-right: 0.2rem;
+                }
+                .json-formatter-dark.json-formatter-row .json-formatter-toggler:after {
+                  display: inline-block;
+                  transition: transform 100ms ease-in;
+                  content: "\25BA";
+                }
+                .json-formatter-dark.json-formatter-row > a > .json-formatter-preview-text {
+                  opacity: 0;
+                  transition: opacity 0.15s ease-in;
+                  font-style: italic;
+                }
+                .json-formatter-dark.json-formatter-row:hover > a > .json-formatter-preview-text {
+                  opacity: 0.6;
+                }
+                .json-formatter-dark.json-formatter-row.json-formatter-open > .json-formatter-toggler-link .json-formatter-toggler:after {
+                  transform: rotate(90deg);
+                }
+                .json-formatter-dark.json-formatter-row.json-formatter-open > .json-formatter-children:after {
+                  display: inline-block;
+                }
+                .json-formatter-dark.json-formatter-row.json-formatter-open > a > .json-formatter-preview-text {
+                  display: none;
+                }
+                .json-formatter-dark.json-formatter-row.json-formatter-open.json-formatter-empty:after {
+                  display: block;
+                }
+
+        </style>
+        <style>
+            .codehilite .hll { background-color: #ffffcc }
+                .codehilite  { background: #f8f8f8; }
+                .codehilite .c { color: #408080; font-style: italic } /* Comment */
+                .codehilite .err { border: 1px solid #FF0000 } /* Error */
+                .codehilite .k { color: #008000; font-weight: bold } /* Keyword */
+                .codehilite .o { color: #666666 } /* Operator */
+                .codehilite .ch { color: #408080; font-style: italic } /* Comment.Hashbang */
+                .codehilite .cm { color: #408080; font-style: italic } /* Comment.Multiline */
+                .codehilite .cp { color: #BC7A00 } /* Comment.Preproc */
+                .codehilite .cpf { color: #408080; font-style: italic } /* Comment.PreprocFile */
+                .codehilite .c1 { color: #408080; font-style: italic } /* Comment.Single */
+                .codehilite .cs { color: #408080; font-style: italic } /* Comment.Special */
+                .codehilite .gd { color: #A00000 } /* Generic.Deleted */
+                .codehilite .ge { font-style: italic } /* Generic.Emph */
+                .codehilite .gr { color: #FF0000 } /* Generic.Error */
+                .codehilite .gh { color: #000080; font-weight: bold } /* Generic.Heading */
+                .codehilite .gi { color: #00A000 } /* Generic.Inserted */
+                .codehilite .go { color: #888888 } /* Generic.Output */
+                .codehilite .gp { color: #000080; font-weight: bold } /* Generic.Prompt */
+                .codehilite .gs { font-weight: bold } /* Generic.Strong */
+                .codehilite .gu { color: #800080; font-weight: bold } /* Generic.Subheading */
+                .codehilite .gt { color: #0044DD } /* Generic.Traceback */
+                .codehilite .kc { color: #008000; font-weight: bold } /* Keyword.Constant */
+                .codehilite .kd { color: #008000; font-weight: bold } /* Keyword.Declaration */
+                .codehilite .kn { color: #008000; font-weight: bold } /* Keyword.Namespace */
+                .codehilite .kp { color: #008000 } /* Keyword.Pseudo */
+                .codehilite .kr { color: #008000; font-weight: bold } /* Keyword.Reserved */
+                .codehilite .kt { color: #B00040 } /* Keyword.Type */
+                .codehilite .m { color: #666666 } /* Literal.Number */
+                .codehilite .s { color: #BA2121 } /* Literal.String */
+                .codehilite .na { color: #7D9029 } /* Name.Attribute */
+                .codehilite .nb { color: #008000 } /* Name.Builtin */
+                .codehilite .nc { color: #0000FF; font-weight: bold } /* Name.Class */
+                .codehilite .no { color: #880000 } /* Name.Constant */
+                .codehilite .nd { color: #AA22FF } /* Name.Decorator */
+                .codehilite .ni { color: #999999; font-weight: bold } /* Name.Entity */
+                .codehilite .ne { color: #D2413A; font-weight: bold } /* Name.Exception */
+                .codehilite .nf { color: #0000FF } /* Name.Function */
+                .codehilite .nl { color: #A0A000 } /* Name.Label */
+                .codehilite .nn { color: #0000FF; font-weight: bold } /* Name.Namespace */
+                .codehilite .nt { color: #008000; font-weight: bold } /* Name.Tag */
+                .codehilite .nv { color: #19177C } /* Name.Variable */
+                .codehilite .ow { color: #AA22FF; font-weight: bold } /* Operator.Word */
+                .codehilite .w { color: #bbbbbb } /* Text.Whitespace */
+                .codehilite .mb { color: #666666 } /* Literal.Number.Bin */
+                .codehilite .mf { color: #666666 } /* Literal.Number.Float */
+                .codehilite .mh { color: #666666 } /* Literal.Number.Hex */
+                .codehilite .mi { color: #666666 } /* Literal.Number.Integer */
+                .codehilite .mo { color: #666666 } /* Literal.Number.Oct */
+                .codehilite .sa { color: #BA2121 } /* Literal.String.Affix */
+                .codehilite .sb { color: #BA2121 } /* Literal.String.Backtick */
+                .codehilite .sc { color: #BA2121 } /* Literal.String.Char */
+                .codehilite .dl { color: #BA2121 } /* Literal.String.Delimiter */
+                .codehilite .sd { color: #BA2121; font-style: italic } /* Literal.String.Doc */
+                .codehilite .s2 { color: #BA2121 } /* Literal.String.Double */
+                .codehilite .se { color: #BB6622; font-weight: bold } /* Literal.String.Escape */
+                .codehilite .sh { color: #BA2121 } /* Literal.String.Heredoc */
+                .codehilite .si { color: #BB6688; font-weight: bold } /* Literal.String.Interpol */
+                .codehilite .sx { color: #008000 } /* Literal.String.Other */
+                .codehilite .sr { color: #BB6688 } /* Literal.String.Regex */
+                .codehilite .s1 { color: #BA2121 } /* Literal.String.Single */
+                .codehilite .ss { color: #19177C } /* Literal.String.Symbol */
+                .codehilite .bp { color: #008000 } /* Name.Builtin.Pseudo */
+                .codehilite .fm { color: #0000FF } /* Name.Function.Magic */
+                .codehilite .vc { color: #19177C } /* Name.Variable.Class */
+                .codehilite .vg { color: #19177C } /* Name.Variable.Global */
+                .codehilite .vi { color: #19177C } /* Name.Variable.Instance */
+                .codehilite .vm { color: #19177C } /* Name.Variable.Magic */
+                .codehilite .il { color: #666666 } /* Literal.Number.Integer.Long */
+
+                .markdown h1 { margin-block-start: 0.34em }
+                .markdown h2 { margin-block-start: 0.42em }
+                .markdown h3 { margin-block-start: 0.5em }
+                .markdown h4 { margin-block-start: 0.67em }
+                .markdown h5 { margin-block-start: 0.84em }
+                .markdown h6 { margin-block-start: 1.17em }
+                .markdown ul { padding-inline-start: 2em }
+                .markdown ol { padding-inline-start: 2em }
+                .markdown strong { font-weight: 600 }
+                .markdown a { color: -webkit-link }
+                .markdown a { color: -moz-hyperlinkText }
+
+        </style>
+        <style>
+            .panel-widget-box {
+                	min-height: 20px;
+                	background-color: #f5f5f5;
+                	border: 1px solid #e3e3e3 !important;
+                	border-radius: 4px;
+                	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+                	box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
+                	overflow-x: hidden;
+                	overflow-y: hidden;
+                }
+
+                .scrollable {
+                  overflow: scroll;
+                }
+
+                progress {
+                	appearance: none;
+                	-moz-appearance: none;
+                	-webkit-appearance: none;
+
+                	border: none;
+                	height: 20px;
+                	background-color: whiteSmoke;
+                	border-radius: 3px;
+                	box-shadow: 0 2px 3px rgba(0,0,0,.5) inset;
+                	color: royalblue;
+                	position: relative;
+                	margin: 0 0 1.5em;
+                }
+
+                progress[value]::-webkit-progress-bar {
+                	background-color: whiteSmoke;
+                	border-radius: 3px;
+                	box-shadow: 0 2px 3px rgba(0,0,0,.5) inset;
+                }
+
+                progress[value]::-webkit-progress-value {
+                	position: relative;
+
+                	background-size: 35px 20px, 100% 100%, 100% 100%;
+                	border-radius:3px;
+                }
+
+                progress.active:not([value])::before {
+                	background-position: 10%;
+                	animation-name: stripes;
+                	animation-duration: 3s;
+                	animation-timing-function: linear;
+                	animation-iteration-count: infinite;
+                }
+
+                progress[value]::-moz-progress-bar {
+                	background-size: 35px 20px, 100% 100%, 100% 100%;
+                	border-radius:3px;
+                }
+
+                progress:not([value])::-moz-progress-bar {
+                	border-radius:3px;
+                	background:
+                	linear-gradient(-45deg, transparent 33%, rgba(0, 0, 0, 0.2) 33%, rgba(0, 0, 0, 0.2) 66%, transparent 66%) left/2.5em 1.5em;
+
+                }
+
+                progress.active:not([value])::-moz-progress-bar {
+                	background-position: 10%;
+                	animation-name: stripes;
+                	animation-duration: 3s;
+                	animation-timing-function: linear;
+                	animation-iteration-count: infinite;
+                }
+
+                progress.active:not([value])::-webkit-progress-bar {
+                	background-position: 10%;
+                	animation-name: stripes;
+                	animation-duration: 3s;
+                	animation-timing-function: linear;
+                	animation-iteration-count: infinite;
+                }
+
+                progress.primary[value]::-webkit-progress-value { background-color: #007bff; }
+                progress.primary:not([value])::before { background-color: #007bff; }
+                progress.primary:not([value])::-webkit-progress-bar { background-color: #007bff; }
+                progress.primary::-moz-progress-bar { background-color: #007bff; }
+
+                progress.secondary[value]::-webkit-progress-value { background-color: #6c757d; }
+                progress.secondary:not([value])::before { background-color: #6c757d; }
+                progress.secondary:not([value])::-webkit-progress-bar { background-color: #6c757d; }
+                progress.secondary::-moz-progress-bar { background-color: #6c757d; }
+
+                progress.success[value]::-webkit-progress-value { background-color: #28a745; }
+                progress.success:not([value])::before { background-color: #28a745; }
+                progress.success:not([value])::-webkit-progress-bar { background-color: #28a745; }
+                progress.success::-moz-progress-bar { background-color: #28a745; }
+
+                progress.danger[value]::-webkit-progress-value { background-color: #dc3545; }
+                progress.danger:not([value])::before { background-color: #dc3545; }
+                progress.danger:not([value])::-webkit-progress-bar { background-color: #dc3545; }
+                progress.danger::-moz-progress-bar { background-color: #dc3545; }
+
+                progress.warning[value]::-webkit-progress-value { background-color: #ffc107; }
+                progress.warning:not([value])::before { background-color: #ffc107; }
+                progress.warning:not([value])::-webkit-progress-bar { background-color: #ffc107; }
+                progress.warning::-moz-progress-bar { background-color: #ffc107; }
+
+                progress.info[value]::-webkit-progress-value { background-color: #17a2b8; }
+                progress.info:not([value])::before { background-color: #17a2b8; }
+                progress.info:not([value])::-webkit-progress-bar { background-color: #17a2b8; }
+                progress.info::-moz-progress-bar { background-color: #17a2b8; }
+
+                progress.light[value]::-webkit-progress-value { background-color: #f8f9fa; }
+                progress.light:not([value])::before { background-color: #f8f9fa; }
+                progress.light:not([value])::-webkit-progress-bar { background-color: #f8f9fa; }
+                progress.light::-moz-progress-bar { background-color: #f8f9fa; }
+
+                progress.dark[value]::-webkit-progress-value { background-color: #343a40; }
+                progress.dark:not([value])::-webkit-progress-bar { background-color: #343a40; }
+                progress.dark:not([value])::before { background-color: #343a40; }
+                progress.dark::-moz-progress-bar { background-color: #343a40; }
+
+                progress:not([value])::-webkit-progress-bar {
+                	border-radius: 3px;
+                	background:
+                	linear-gradient(-45deg, transparent 33%, rgba(0, 0, 0, 0.2) 33%, rgba(0, 0, 0, 0.2) 66%, transparent 66%) left/2.5em 1.5em;
+                }
+                progress:not([value])::before {
+                	content:" ";
+                	position:absolute;
+                	height: 20px;
+                	top:0;
+                	left:0;
+                	right:0;
+                	bottom:0;
+                	border-radius: 3px;
+                	background:
+                	linear-gradient(-45deg, transparent 33%, rgba(0, 0, 0, 0.2) 33%, rgba(0, 0, 0, 0.2) 66%, transparent 66%) left/2.5em 1.5em;
+                }
+
+                @keyframes stripes {
+                  from {background-position: 0%}
+                  to {background-position: 100%}
+                }
+
+        </style>
+        
+        
+          
+        <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-2.2.1.min.js" integrity="sha384-qkRvDQVAIfzsJo40iRBbxt6sttt0hv4lh74DG7OK4MCHv4C5oohXYoHUM5W11uqS" crossorigin="anonymous"></script>
+        <script type="text/javascript">
+            Bokeh.set_log_level("info");
+        </script>
+        
+      
+      
+    
+  </head>
+  
+  
+  <body>
+    
+      
+        
+          
+          
+            
+              <div class="bk-root" id="9420a772-194d-4a89-b4fc-1273ecf95541" data-root-id="154404"></div>
+            
+          
+        
+      
+      
+        <script type="application/json" id="155930">
+          {"ba94039e-ba8f-4309-8d4a-4a33ae88ff88":{"roots":{"references":[{"attributes":{"below":[{"id":"154415"}],"center":[{"id":"154418"},{"id":"154422"},{"id":"154437"}],"left":[{"id":"154419"}],"plot_height":400,"renderers":[{"id":"154428"}],"right":[{"id":"154437"}],"title":{"id":"154405"},"toolbar":{"id":"154423"},"toolbar_location":"above","x_range":{"id":"154407"},"x_scale":{"id":"154411"},"y_range":{"id":"154409"},"y_scale":{"id":"154413"}},"id":"154404","subtype":"Figure","type":"Plot"},{"attributes":{"end":2015,"start":1950},"id":"154407","type":"Range1d"},{"attributes":{"axis_label":"Year","formatter":{"id":"154432"},"ticker":{"id":"154416"}},"id":"154415","type":"LogAxis"},{"attributes":{},"id":"154411","type":"LogScale"},{"attributes":{},"id":"154413","type":"LinearScale"},{"attributes":{"data":null,"x":[1548.0,1376048943.0],"y":[5,50]},"id":"31425","type":"LinearInterpolator"},{"attributes":{"text":"1962"},"id":"154405","type":"Title"},{"attributes":{"fill_alpha":{"value":0.1},"fill_color":{"field":"region","transform":{"id":"31426"}},"line_alpha":{"value":0.1},"line_color":{"field":"region","transform":{"id":"31426"}},"size":{"field":"population","transform":{"id":"31425"},"units":"screen"},"x":{"field":"x"},"y":{"field":"y"}},"id":"154427","type":"Circle"},{"attributes":{},"id":"154434","type":"BasicTickFormatter"},{"attributes":{"active_drag":"auto","active_inspect":"auto","active_multi":null,"active_scroll":"auto","active_tap":"auto","tools":[{"id":"131378"}]},"id":"154423","type":"Toolbar"},{"attributes":{},"id":"154420","type":"BasicTicker"},{"attributes":{"callback":null,"show_arrow":false,"tooltips":[["Year","@year"],["Population","@population"]]},"id":"131378","type":"HoverTool"},{"attributes":{"end":100},"id":"154409","type":"Range1d"},{"attributes":{"source":{"id":"154403"}},"id":"154429","type":"CDSView"},{"attributes":{"axis":{"id":"154419"},"dimension":1,"ticker":null},"id":"154422","type":"Grid"},{"attributes":{"label":{"field":"region"},"renderers":[{"id":"154428"}]},"id":"154438","type":"LegendItem"},{"attributes":{"axis":{"id":"154415"},"ticker":null},"id":"154418","type":"Grid"},{"attributes":{"fill_alpha":{"value":0.6},"fill_color":{"field":"region","transform":{"id":"31426"}},"line_alpha":{"value":0.6},"line_color":{"field":"region","transform":{"id":"31426"}},"size":{"field":"population","transform":{"id":"31425"},"units":"screen"},"x":{"field":"x"},"y":{"field":"y"}},"id":"154426","type":"Circle"},{"attributes":{},"id":"154435","type":"Selection"},{"attributes":{"border_line_color":null,"items":[{"id":"154438"}],"location":[20,0]},"id":"154437","type":"Legend"},{"attributes":{"ticker":null},"id":"154432","type":"LogTickFormatter"},{"attributes":{"num_minor_ticks":10},"id":"154416","type":"LogTicker"},{"attributes":{"axis_label":"Lifespan/Income","formatter":{"id":"154434"},"ticker":{"id":"154420"}},"id":"154419","type":"LinearAxis"},{"attributes":{},"id":"154436","type":"UnionRenderers"},{"attributes":{"factors":["South Asia","Europe &amp; Central Asia","Middle East &amp; North Africa","Sub-Saharan Africa","America","East Asia &amp; Pacific"],"palette":["#3288bd","#99d594","#e6f598","#fee08b","#fc8d59","#d53e4f"]},"id":"31426","type":"CategoricalColorMapper"},{"attributes":{"data_source":{"id":"154403"},"glyph":{"id":"154426"},"hover_glyph":null,"muted_glyph":null,"nonselection_glyph":{"id":"154427"},"selection_glyph":null,"view":{"id":"154429"}},"id":"154428","type":"GlyphRenderer"},{"attributes":{"data":{"country":["Afghanistan","Albania","Algeria","Angola","Antigua and Barbuda","Argentina","Armenia","Aruba","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bhutan","Bolivia","Bosnia and Herzegovina","Botswana","Brazil","Brunei","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Cape Verde","Chad","Channel Islands","Chile","China","Colombia","Comoros","Congo, Dem. Rep.","Congo, Rep.","Costa Rica","Cote d'Ivoire","Croatia","Cuba","Cyprus","Denmark","Djibouti","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Ethiopia","Fiji","Finland","France","French Guiana","French Polynesia","Gabon","Gambia","Georgia","Germany","Ghana","Greece","Greenland","Grenada","Guadeloupe","Guam","Guatemala","Guinea","Guinea-Bissau","Guyana","Haiti","Honduras","Hong Kong, China","Hungary","Iceland","India","Indonesia","Iran","Iraq","Ireland","Israel","Italy","Jamaica","Japan","Jordan","Kazakhstan","Kenya","Kiribati","Kuwait","Latvia","Lebanon","Lesotho","Liberia","Libya","Lithuania","Luxembourg","Macao, China","Macedonia, FYR","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Martinique","Mauritania","Mauritius","Mayotte","Mexico","Micronesia, Fed. Sts.","Moldova","Mongolia","Montenegro","Morocco","Mozambique","Myanmar","Namibia","Nepal","Netherlands","Netherlands Antilles","New Caledonia","New Zealand","Nicaragua","Niger","Nigeria","Norway","Oman","Pakistan","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Poland","Portugal","Puerto Rico","Qatar","Reunion","Romania","Russia","Rwanda","Samoa","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Slovak Republic","Slovenia","Solomon Islands","Somalia","South Africa","South Sudan","Spain","Sri Lanka","Sudan","Suriname","Swaziland","Sweden","Switzerland","Syria","Taiwan","Tajikistan","Tanzania","Thailand","Timor-Leste","Togo","Tonga","Trinidad and Tobago","Tunisia","Turkey","Turkmenistan","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","Uruguay","Uzbekistan","Vanuatu","Venezuela","Vietnam","Virgin Islands (U.S.)","West Bank and Gaza","Western Sahara","Zambia","Zimbabwe"],"population":{"__ndarray__":"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","dtype":"float64","order":"little","shape":[192]},"region":["South Asia","Europe &amp; Central Asia","Middle East &amp; North Africa","Sub-Saharan Africa","America","America","Europe &amp; Central Asia","America","East Asia &amp; Pacific","Europe &amp; Central Asia","Europe &amp; Central Asia","America","Middle East &amp; North Africa","South Asia","America","Europe &amp; Central Asia","Europe &amp; Central Asia","America","Sub-Saharan Africa","South Asia","America","Europe &amp; Central Asia","Sub-Saharan Africa","America","East Asia &amp; Pacific","Europe &amp; Central Asia","Sub-Saharan Africa","Sub-Saharan Africa","East Asia &amp; Pacific","Sub-Saharan Africa","America","Sub-Saharan Africa","Sub-Saharan Africa","Europe &amp; Central Asia","America","East Asia &amp; Pacific","America","Sub-Saharan Africa","Sub-Saharan Africa","Sub-Saharan Africa","America","Sub-Saharan Africa","Europe &amp; Central Asia","America","Europe &amp; Central Asia","Europe &amp; Central Asia","Middle East &amp; North Africa","America","Middle East &amp; North Africa","America","Sub-Saharan Africa","Sub-Saharan Africa","Europe &amp; Central Asia","Sub-Saharan Africa","East Asia &amp; Pacific","Europe &amp; Central Asia","Europe &amp; Central Asia","America","East Asia &amp; Pacific","Sub-Saharan Africa","Sub-Saharan Africa","Europe &amp; Central Asia","Europe &amp; Central Asia","Sub-Saharan Africa","Europe &amp; Central Asia","Europe &amp; Central Asia","America","America","East Asia &amp; Pacific","America","Sub-Saharan Africa","Sub-Saharan Africa","America","America","America","East Asia &amp; Pacific","Europe &amp; Central Asia","Europe &amp; Central Asia","South Asia","East Asia &amp; Pacific","Middle East &amp; North Africa","Middle East &amp; North Africa","Europe &amp; Central Asia","Middle East &amp; North Africa","Europe &amp; Central Asia","America","East Asia &amp; Pacific","Middle East &amp; North Africa","Europe &amp; Central Asia","Sub-Saharan Africa","East Asia &amp; Pacific","Middle East &amp; North Africa","Europe &amp; Central Asia","Middle East &amp; North Africa","Sub-Saharan Africa","Sub-Saharan Africa","Middle East &amp; North Africa","Europe &amp; Central Asia","Europe &amp; Central Asia","East Asia &amp; Pacific","Europe &amp; Central Asia","Sub-Saharan Africa","Sub-Saharan Africa","East Asia &amp; Pacific","South Asia","Sub-Saharan Africa","Europe &amp; Central Asia","America","Sub-Saharan Africa","Sub-Saharan Africa","Sub-Saharan Africa","America","East Asia &amp; Pacific","Europe &amp; Central Asia","East Asia &amp; Pacific","Europe &amp; Central Asia","Middle East &amp; North Africa","Sub-Saharan Africa","East Asia &amp; Pacific","Sub-Saharan Africa","South Asia","Europe &amp; Central Asia","America","East Asia &amp; Pacific","East Asia &amp; Pacific","America","Sub-Saharan Africa","Sub-Saharan Africa","Europe &amp; Central Asia","Middle East &amp; North Africa","South Asia","America","East Asia &amp; Pacific","America","America","East Asia &amp; Pacific","Europe &amp; Central Asia","Europe &amp; Central Asia","America","Middle East &amp; North Africa","Sub-Saharan Africa","Europe &amp; Central Asia","Europe &amp; Central Asia","Sub-Saharan Africa","East Asia &amp; Pacific","Sub-Saharan Africa","Middle East &amp; North Africa","Sub-Saharan Africa","Europe &amp; Central Asia","Sub-Saharan Africa","Sub-Saharan Africa","East Asia &amp; Pacific","Europe &amp; Central Asia","Europe &amp; Central Asia","East Asia &amp; Pacific","Sub-Saharan Africa","Sub-Saharan Africa","Sub-Saharan Africa","Europe &amp; Central Asia","South Asia","Sub-Saharan Africa","America","Sub-Saharan Africa","Europe &amp; Central Asia","Europe &amp; Central Asia","Middle East &amp; North Africa","East Asia &amp; Pacific","Europe &amp; Central Asia","Sub-Saharan Africa","East Asia &amp; Pacific","East Asia &amp; Pacific","Sub-Saharan Africa","East Asia &amp; Pacific","America","Middle East &amp; North Africa","Europe &amp; Central Asia","Europe &amp; Central Asia","Sub-Saharan Africa","Europe &amp; Central Asia","Middle East &amp; North Africa","Europe &amp; Central Asia","America","America","Europe &amp; Central Asia","East Asia &amp; Pacific","America","East Asia &amp; Pacific","America","Middle East &amp; North Africa","Middle East &amp; North Africa","Sub-Saharan Africa","Sub-Saharan Africa"],"x":{"__ndarray__":"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","dtype":"float64","order":"little","shape":[192]},"y":{"__ndarray__":"vMtFfCd2QkA8WP/nMP9PQKLRHcTOJEpAU9DtJY1hRUAEz72HS95PQDKx+bg2PFBAetFXkGYMT0Aj2/l+apxQQC9uowG8xVFABhIUP8ZsUUDzH9JvXydNQBSWeEDZlE5AUrgehevxS0C+MJkqGOVGQICCixU1QFBAvJaQD3qmUUD99nXgnJFRQM+Du7N2O09AuK8D54woRUAqUmFsIahFQC6QoPgxlkdA5A8Gnnv/TkDEacGLvkJMQCKOdXEbrUxAx4Ds9e4XUEA/V1uxv0xRQL8OnDOiFERAb9i2KLNRRUBM4NbdPDVHQBGN7iB2xkdAjZduEoPQUUDee7jkuDNMQL7e/fFelUdACKwcWmS7UUBE3QcgtalNQERN9PkoI0VAjKGcaFcRT0C0AkNWt2pHQM8xIHu9+0ZA0gDeAgk6SEAW9rTDX3tQQOUK73IRj0ZAOL72zJIYUEAiwyreyNRQQDW1bK0vUlFAw9MrZRkSUkBXW7G/7J5KQNGuQspPKk1Ab/Wc9L5hSECbPdAKDMlLQJ4kXTP5tkVAh85r7BJFRUB5WKg1zYtRQBlW8UbmoURAWVGDaRjuTUC62or9ZSdRQKUsQxzrslFA3SQGgZWjTUCWQ4ts54tMQET67evAWUdAQIf58gLcRUA6HjNQGV9PQJb5mifPilFAfkRMiSTaSUB5knTN5LtRQGZdUJ2WPE9AuAa2SrBIT0BaZDvfTx1OQK5H4XoU/k5ARkJbzqUoR0Dv5qkOublFQI+lD11Qb0VA8J2Y9WKYTkBORSqMLZRFQD0s1JrmHUpAbef7qfEiUUA4+MJkqgBRQJf/kH77alJA7ncoCvRJRUDbUDHO3wRJQMaKGkzDkEhA3nahuU5DS0DHuriNBpBRQJF++zpwTlFAldQJaCJMUUDX3TzVIU9QQGiz6nO1NVFABp57D5dsTEBsIchBCaNNQNozSwLUdEpA0O0ljdHaR0DNWDSdnQRQQFkXt9EAflFAHHdKB+t/UEAYQznRrsJKQFBwsaIGg0VA6IL6ljntSkBxGw3gLXBRQJ/Nqs/VRlFAqMZLN4l5UECRm+EGfI5OQMDnhxHC80ZA8rBQa5p3Q0BOf/YjRdROQJ4kXTP5xkZAEtpyLsX1QEDoaiv2lw1RQJhuEoPAyk5AP8bctYTMSEDQm4pUGOtNQAaBlUOLXExA1A5/TdbITUD+SBEZVsFMQAXFjzF3TU5AaOif4GKlSEAtfeiC+nZQQAQEc/T4rUpA43DmV3MQRkDzVIfcDKdFQLbbLjTXuUpA+IiYEkkkRkBqvHSTGFRSQOj7qfHSlVBAsp3vp8bbTEAqOpLLf9hRQKOvIM1YpElA8tJNYhDIREASg8DKoVVIQL99HThnVFJAdLUV+8t+R0D9wcBz7zFIQAB0mC8vKFBAc2N6whJfSEAbmUf+YMBQQAyTqYJR2UdAGRwlr86xTkByio7k8u9QQL7BFyZTJVBAiUFg5dBKUUDNtP0rK+1PQHNoke18r0xAnPnVHCDAUECoV8oyxBFRQNpVSPlJBUZAoaF/gouVTUD8HYoCfbJKQF8fnbry6UtARRK9jGJpRkDPTgZHyftPQIVkARO4JU9Aj3Ba8KKvREC1iZP7HZpQQMsQx7q4nVFAPIOG/gm2UEADYDyDhh5KQBNJ9DKKJUdA5dAi2/neSkDECOHRxoFFQNxoAG+BVFFAZED2eve3TkBXeJeL+E5KQPYQje4g1k5AjgbwFkgQSUCwcmiR7UxSQHctIR/0zFFAl3MpripLTEBWDi2ynV9QQMAma9RDREtAZED2evcHSUDUDn9N1vhNQLxcxHditkRAUaBP5EkSR0AC2evdH79PQB2PGaiMD1BAOnr83qYfSEDmXIqryg5JQNaLoZxoJ0lA+FPjpZs0SECVZYhjXWxRQPMC7KNTp0xA46WbxCCwUUD99nXgnIFRQCl5dY4BAVFAzvxqDhBsTUAR7s7abQdLQAN9Ik+SXk9AzGJi83EdTUAv3SQGgR1QQNRIS+XtmEtAVg4tsp2PQ0BAy/Pg7rxKQCyazk4GZ0tA","dtype":"float64","order":"little","shape":[192]}},"selected":{"id":"154435"},"selection_policy":{"id":"154436"}},"id":"154403","type":"ColumnDataSource"}],"root_ids":["154404"]},"title":"Bokeh Application","version":"2.2.1"}}
+        </script>
+        <script type="text/javascript">
+          (function() {
+            var fn = function() {
+              Bokeh.safely(function() {
+                (function(root) {
+                  function embed_document(root) {
+                    
+                  var docs_json = document.getElementById('155930').textContent;
+                  var render_items = [{"docid":"ba94039e-ba8f-4309-8d4a-4a33ae88ff88","root_ids":["154404"],"roots":{"154404":"9420a772-194d-4a89-b4fc-1273ecf95541"}}];
+                  root.Bokeh.embed.embed_items(docs_json, render_items);
+                
+                  }
+                  if (root.Bokeh !== undefined) {
+                    embed_document(root);
+                  } else {
+                    var attempts = 0;
+                    var timer = setInterval(function(root) {
+                      if (root.Bokeh !== undefined) {
+                        clearInterval(timer);
+                        embed_document(root);
+                      } else {
+                        attempts++;
+                        if (attempts > 100) {
+                          clearInterval(timer);
+                          console.log("Bokeh: ERROR: Unable to run BokehJS code because BokehJS library is missing");
+                        }
+                      }
+                    }, 10, root)
+                  }
+                })(window);
+              });
+            };
+            if (document.readyState != "loading") fn();
+            else document.addEventListener("DOMContentLoaded", fn);
+          })();
+        </script>
+    
+  </body>
+  
+</html>
