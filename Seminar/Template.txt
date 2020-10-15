@@ -1,0 +1,19 @@
+Cover (1 page)
+Background /Motivation (1 page)
+	Why the authors did this research?
+Problem description (1 page)
+	What problem(s) the paper wants to solve?
+Ideas (1 page)
+	What idea is used? (explain in a non-technical and intuitive way)
+Proposed methods and techniques (4 pages)
+	Detailed description of the proposed method
+Experiments (2 pages)
+	What baseline methods/datasets/evaluation metrics are used in the experiments?
+Results (3 pages)
+	How is the result comparing state-of-the-art? Is that significant?
+Related works (1 page)
+	What are the competitors of the proposed method? How they work? Why they cannot be used for the 	problem?
+Limitation (1 page)
+	What are critical points or weaknesses of the paper? Discuss the conditions that the proposed 	method would not work or has limitations.
+Potential future works (1 page)
+	If one wants to continue this work what would be the best idea(s), what are the extensions of the 	current work?
